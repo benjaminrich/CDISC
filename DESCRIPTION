@@ -1,0 +1,21 @@
+Package: CDISC
+Type: Package
+Version: 0.3
+Date: 2024-04-09
+Title: Utilities for CDISC SDTM/ADaM Datasets
+Description:
+  A collection of functions for reading and manipulating CDISC SDTM/ADaM
+  datasets.
+Authors@R: c(
+  person("Benjamin", "Rich", role=c("aut", "cre"), email="mail@benjaminrich.net"))
+URL: https://github.com/benjaminrich/CDISC
+BugReports: https://github.com/benjaminrich/CDISC/issues
+License: MIT + file LICENSE
+Depends: R (>= 4.1.0)
+Imports: knitr,data.table,haven,readxl,openxlsx,mappings
+Suggests: testthat,rmarkdown,lumos
+VignetteBuilder: knitr
+LazyData: true
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.1
