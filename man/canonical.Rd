@@ -4,7 +4,14 @@
 \alias{canonical}
 \title{Canonical representation of a \code{data.frame}}
 \usage{
-canonical(x, ..., uid = NULL, domain = NULL)
+canonical(
+  x,
+  ...,
+  uid = NULL,
+  domain = unique(x$domain),
+  domain.fallback = deparse1(substitute(x)),
+  .prune = TRUE
+)
 }
 \arguments{
 \item{x}{A \code{data.frame}.}
@@ -15,6 +22,10 @@ canonical(x, ..., uid = NULL, domain = NULL)
 
 \item{domain}{The domain name, which will be stripped from column name if
 present as a prefix.}
+
+\item{domain.fallback}{Used as a fallback in case \code{domain} is \code{NULL}.}
+
+\item{.prune}{Should the result be filtered through \link{prune}?}
 }
 \value{
 A \code{data.frame}.
@@ -27,5 +38,5 @@ column name prefix (e.g. lbtest, lbdtc, etc). If you want to merge these
 data sets using \code{rbind} for example, it is easier if those prefixes are
 stripped. This function also harmonizes the \code{usubjid} in different data sets
 to a specific subset. Lastly, "empty" columns (containing only \code{NA}) are
-stripped (see \link{prune}).
+stripped by default (see \link{prune}).
 }

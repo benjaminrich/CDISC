@@ -532,34 +532,33 @@ prune <- function(x) {
 #' data sets using `rbind` for example, it is easier if those prefixes are
 #' stripped. This function also harmonizes the `usubjid` in different data sets
 #' to a specific subset. Lastly, "empty" columns (containing only `NA`) are
-#' stripped (see [prune]).
+#' stripped by default (see [prune]).
 #'
 #' @param x A `data.frame`.
 #' @param ... Ignored.
 #' @param uid The unique `usubjid` to keep.
 #' @param domain The domain name, which will be stripped from column name if
 #' present as a prefix.
+#' @param domain.fallback Used as a fallback in case `domain` is `NULL`.
+#' @param .prune Should the result be filtered through [prune]?
 #' @return A `data.frame`.
 #' @export
-canonical <- function(x, ..., uid=NULL, domain=NULL) {
+canonical <- function(x, ..., uid=NULL, domain=unique(x$domain), domain.fallback=deparse1(substitute(x)), .prune=TRUE) {
 
-    d1 <- deparse1(substitute(x))
-
-    x <- as.data.frame(x)
+    if (!inherits(x, "data.frame")) {
+        stop("x must be a data.frame")
+        #x <- as.data.frame(x)
+    }
 
     if (is.null(domain)) {
-        if (is.null(x$domain)) {
-            domain <- d1
-        } else {
-            domain <- unique(x$domain)
-        }
+        domain <- domain.fallback
     }
 
     if (!is.null(domain)) {
         if (length(domain) > 1) {
             warning("domain is not unique")
         }
-        names(x) <- gsub(paste0("^", domain), "", names(x), ignore.case=TRUE)
+        names(x) <- gsub(paste0("^", domain, collapse="|"), "", names(x), ignore.case=TRUE)
     }
 
     if (grepl("^usubjid$", names(x), ignore.case=TRUE)) {
@@ -575,7 +574,11 @@ canonical <- function(x, ..., uid=NULL, domain=NULL) {
         x <- x[order(x[[i]]),]
     }
 
-    prune(x)
+    if (.prune) {
+        x <- prune(x)
+    }
+
+    x
 }
 
 #' Check for the value "Y", ignoring `NA`
