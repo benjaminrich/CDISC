@@ -561,8 +561,8 @@ canonical <- function(x, ..., uid=NULL, domain=unique(x$domain), domain.fallback
         names(x) <- gsub(paste0("^", domain, collapse="|"), "", names(x), ignore.case=TRUE)
     }
 
-    if (grepl("^usubjid$", names(x), ignore.case=TRUE)) {
-        i <- which(grepl("^usubjid$", names(x), ignore.case=TRUE))
+    if ("usubjid" %in% tolower(names(x))) {
+        i <- match("usubjid", tolower(names(x)))
         if (!is.null(uid)) {
             x <- x[ x[[i]] %in% uid ]
         } else {
